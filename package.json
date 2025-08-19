@@ -1,0 +1,34 @@
+{
+  "name": "@jc-jacobe/create-react-kit",
+  "version": "1.0.0",
+  "description": "A CLI tool to create a React + Vite pre-setup application",
+  "main": "dist/index.ts",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "react-kit": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "template"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/index.ts",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react",
+    "vite",
+    "template",
+    "cli",
+    "starter"
+  ],
+  "author": "John Carlo Pura Jacobe",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
