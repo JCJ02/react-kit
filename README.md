@@ -7,5 +7,5 @@
 ### To Install it:
 
 ```console
-$ npx @jc-jacobe/create-react-kit <Your_App_Name>
+$ npm @jc-jacobe/react-kit <Your_App_Name>
 ```
