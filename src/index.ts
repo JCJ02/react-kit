@@ -4,6 +4,29 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 
+const copyRecursiveSync = (src: string, dest: string) => {
+  const stat = fs.statSync(src); // Get file system stats
+
+  if (stat.isDirectory()) {
+    // Ensure destination directory exists
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest, { recursive: true });
+    }
+
+    // Loop through each file/folder inside src
+    for (const file of fs.readdirSync(src)) {
+      const currentSrc = path.join(src, file);
+      const currentDest = path.join(dest, file);
+
+      // Recursive call for subdirectories and files
+      copyRecursiveSync(currentSrc, currentDest);
+    }
+  } else {
+    // If it's a file, just copy it
+    fs.copyFileSync(src, dest);
+  }
+};
+
 const run = async () => {
   const args = process.argv.slice(2);
   const projectName = args[0];
@@ -22,7 +45,7 @@ const run = async () => {
 
   console.log(`📦 Creating Project: ${projectName}...`);
 
-  // Use template inside package
+  // Path to template inside package
   const templateDirectory = path.join(__dirname, "..", "template");
 
   if (!fs.existsSync(templateDirectory)) {
@@ -30,7 +53,8 @@ const run = async () => {
     process.exit(1);
   }
 
-  fs.copyFileSync(templateDirectory, projectPath);
+  // Copy entire template folder
+  copyRecursiveSync(templateDirectory, projectPath);
 
   // Install Dependencies
   console.log("📥 Installing dependencies...");
