@@ -6,7 +6,7 @@ import path from "path";
 const projectName = process.argv[2];
 
 if (!projectName) {
-  console.log("❌ Please, Provide a Project name!");
+  console.log("❌ Please, Provide a Project Name!");
   process.exit(1);
 }
 
