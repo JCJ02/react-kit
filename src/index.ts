@@ -5,47 +5,47 @@ import fs from "fs";
 import path from "path";
 
 const copyRecursiveSync = (src: string, dest: string) => {
-  const stat = fs.statSync(src); // Get file system stats
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, {
+      recursive: true,
+    });
+  }
 
-  if (stat.isDirectory()) {
-    // Ensure destination directory exists
-    if (!fs.existsSync(dest)) {
-      fs.mkdirSync(dest, { recursive: true });
+  for (const item of fs.readdirSync(src)) {
+    const srcPath = path.join(src, item);
+    const destPath = path.join(dest, item);
+    const stat = fs.statSync(srcPath);
+
+    if (stat.isDirectory()) {
+      copyRecursiveSync(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
     }
-
-    // Loop through each file/folder inside src
-    for (const file of fs.readdirSync(src)) {
-      const currentSrc = path.join(src, file);
-      const currentDest = path.join(dest, file);
-
-      // Recursive call for subdirectories and files
-      copyRecursiveSync(currentSrc, currentDest);
-    }
-  } else {
-    // If it's a file, just copy it
-    fs.copyFileSync(src, dest);
   }
 };
 
 const run = async () => {
   const args = process.argv.slice(2);
-  const projectName = args[0];
+  const projectName = args[0] || "." || "./";
 
-  if (!projectName) {
-    console.error("❌ Please Provide a Project Name.");
+  const projectPath =
+    projectName === "." || "./"
+      ? process.cwd()
+      : path.resolve(process.cwd(), projectName);
+
+  if (projectName !== "." && fs.existsSync(projectPath)) {
+    console.error(`❌ Folder "${projectName}" already exists!`);
     process.exit(1);
-  }
-
-  const projectPath = path.resolve(process.cwd(), projectName);
-
-  if (fs.existsSync(projectPath)) {
+  } else if (projectName !== "./" && fs.existsSync(projectPath)) {
     console.error(`❌ Folder "${projectName}" already exists!`);
     process.exit(1);
   }
 
-  console.log(`📦 Creating Project: ${projectName}...`);
+  console.log("Welcome to React Kit Folder Structure!!!");
+  console.log(`📦 Creating Project in: ${projectPath}...`);
 
-  // Path to template inside package
+  // Use template inside package
+
   const templateDirectory = path.join(__dirname, "..", "template");
 
   if (!fs.existsSync(templateDirectory)) {
@@ -61,8 +61,9 @@ const run = async () => {
   execSync("npm install", { cwd: projectPath, stdio: "inherit" });
 
   console.log("✅ Done!");
-  console.log(`- cd ${projectName}`);
-  console.log("- npm run dev");
+  console.log(
+    projectName === "." ? "- npm run dev" : `- cd ${projectName}\n- npm run dev`
+  );
 };
 
 run();
