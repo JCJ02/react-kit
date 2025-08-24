@@ -36,12 +36,6 @@ or
 $ npx @jc-jacobe/react-kit .
 ```
 
-or
-
-```console
-$ npx @jc-jacobe/react-kit ./
-```
-
 ### 2. Navigate into the project if you provide folder name.
 
 ```console
