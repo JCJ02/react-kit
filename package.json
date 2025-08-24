@@ -1,6 +1,6 @@
 {
   "name": "@jc-jacobe/react-kit",
-  "version": "1.0.6",
+  "version": "1.0.5",
   "description": "A CLI Tool to Create a React + Vite Pre-Setup Application",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
